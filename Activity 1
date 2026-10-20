@@ -1,0 +1,113 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+ 
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<String> reports = new ArrayList<>();
+        int choice = 0;
+ 
+        do {
+            System.out.println("\n=== CAMPUS LOST-AND-FOUND TRACKER ===");
+            System.out.println("1. Add an item description");
+            System.out.println("2. View all reports with numbered positions");
+            System.out.println("3. Search reports by a keyword (case-insensitive)");
+            System.out.println("4. Remove a report by its displayed number");
+            System.out.println("5. Show total reports");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice (1-6): ");
+ 
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                scanner.nextLine(); 
+            } else {
+                System.out.println("Invalid input! Please enter a number between 1 and 6.");
+                scanner.nextLine(); 
+                continue;
+            }
+ 
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter item description: ");
+                    String description = scanner.nextLine().trim();
+                    if (description.isEmpty()) {
+                        System.out.println("Error: Description cannot be empty.");
+                    } else {
+                        reports.add(description);
+                        System.out.println("Item successfully added.");
+                    }
+                    break;
+ 
+                case 2:
+                    if (reports.isEmpty()) {
+                        System.out.println("The lost-and-found list is currently empty.");
+                    } else {
+                        System.out.println("\n--- All Lost-and-Found Reports ---");
+                        for (int i = 0; i < reports.size(); i++) {
+                            System.out.println((i + 1) + ". " + reports.get(i));
+                        }
+                    }
+                    break;
+ 
+                case 3:
+                    if (reports.isEmpty()) {
+                        System.out.println("The list is empty. No reports to search.");
+                        break;
+                    }
+                    System.out.print("Enter keyword to search: ");
+                    String keyword = scanner.nextLine().trim().toLowerCase();
+                    if (keyword.isEmpty()) {
+                        System.out.println("Error: Search keyword cannot be empty.");
+                        break;
+                    }
+                    boolean found = false;
+                    System.out.println("\n--- Search Results ---");
+                    for (int i = 0; i < reports.size(); i++) {
+                        if (reports.get(i).toLowerCase().contains(keyword)) {
+                            System.out.println((i + 1) + ". " + reports.get(i));
+                            found = true;
+                        }
+                    }
+                    if (!found) {
+                        System.out.println("No matching reports found for keyword: \"" + keyword + "\".");
+                    }
+                    break;
+ 
+                case 4:
+                    if (reports.isEmpty()) {
+                        System.out.println("The list is empty. Nothing to remove.");
+                        break;
+                    }
+                    System.out.print("Enter report number to remove: ");
+                    if (scanner.hasNextInt()) {
+                        int index = scanner.nextInt();
+                        scanner.nextLine();
+                        if (index >= 1 && index <= reports.size()) {
+                            String removedItem = reports.remove(index - 1);
+                            System.out.println("Successfully removed report: \"" + removedItem + "\"");
+                        } else {
+                            System.out.println("Error: Invalid report number. Please choose between 1 and " + reports.size() + ".");
+                        }
+                    } else {
+                        System.out.println("Invalid input! Please enter a valid number.");
+                        scanner.nextLine();
+                    }
+                    break;
+ 
+                case 5:
+                    System.out.println("Total reports recorded: " + reports.size());
+                    break;
+ 
+                case 6:
+                    System.out.println("Exiting Lost-and-Found Tracker. Goodbye!");
+                    break;
+ 
+                default:
+                    System.out.println("Invalid choice! Please select an option between 1 and 6.");
+            }
+        } while (choice != 6);
+ 
+        scanner.close();
+    }
+}
+ 
