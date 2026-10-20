@@ -1,0 +1,98 @@
+import java.util.HashSet;
+import java.util.Scanner;
+ 
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        HashSet<String> eventCodes = new HashSet<>();
+        int choice = 0;
+ 
+        do {
+            System.out.println("\n=== CLUB MEMBERSHIP & EVENT CODES ===");
+            System.out.println("1. Register event code");
+            System.out.println("2. View all unique codes");
+            System.out.println("3. Check whether a code exists");
+            System.out.println("4. Remove a code");
+            System.out.println("5. Show total unique codes");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice (1-6): ");
+ 
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                scanner.nextLine(); 
+            } else {
+                System.out.println("Invalid input! Please enter a number between 1 and 6.");
+                scanner.nextLine();
+                continue;
+            }
+ 
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter event code to register: ");
+                    String code = scanner.nextLine().trim().toUpperCase();
+                    if (code.isEmpty()) {
+                        System.out.println("Error: Event code cannot be blank.");
+                    } else if (eventCodes.contains(code)) {
+                        System.out.println("Duplicate entry detected! Code \"" + code + "\" is already registered.");
+                    } else {
+                        eventCodes.add(code);
+                        System.out.println("Event code \"" + code + "\" registered successfully.");
+                    }
+                    break;
+ 
+                case 2:
+                    if (eventCodes.isEmpty()) {
+                        System.out.println("No event codes registered yet (set is empty).");
+                    } else {
+                        System.out.println("\n--- Registered Unique Event Codes ---");
+                        System.out.println("(Note: Display order in a HashSet is not guaranteed.)");
+                        for (String c : eventCodes) {
+                            System.out.println("- " + c);
+                        }
+                    }
+                    break;
+ 
+                case 3:
+                    if (eventCodes.isEmpty()) {
+                        System.out.println("The set is empty. No codes to check.");
+                        break;
+                    }
+                    System.out.print("Enter event code to check: ");
+                    String checkCode = scanner.nextLine().trim().toUpperCase();
+                    if (eventCodes.contains(checkCode)) {
+                        System.out.println("Yes, code \"" + checkCode + "\" exists in the system.");
+                    } else {
+                        System.out.println("No, code \"" + checkCode + "\" does not exist.");
+                    }
+                    break;
+ 
+                case 4:
+                    if (eventCodes.isEmpty()) {
+                        System.out.println("The set is empty. Nothing to remove.");
+                        break;
+                    }
+                    System.out.print("Enter event code to remove: ");
+                    String removeCode = scanner.nextLine().trim().toUpperCase();
+                    if (eventCodes.remove(removeCode)) {
+                        System.out.println("Event code \"" + removeCode + "\" has been successfully removed.");
+                    } else {
+                        System.out.println("Error: Code \"" + removeCode + "\" was not found in the system.");
+                    }
+                    break;
+ 
+                case 5:
+                    System.out.println("Total unique event codes: " + eventCodes.size());
+                    break;
+ 
+                case 6:
+                    System.out.println("Exiting Event Registration System. Goodbye!");
+                    break;
+ 
+                default:
+                    System.out.println("Invalid choice! Please select an option between 1 and 6.");
+            }
+        } while (choice != 6);
+ 
+        scanner.close();
+    }
+}
