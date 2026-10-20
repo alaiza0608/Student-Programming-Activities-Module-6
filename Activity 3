@@ -1,0 +1,127 @@
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Scanner;
+ 
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        HashMap<String, String> bookCatalog = new HashMap<>();
+        Queue<String> requestQueue = new ArrayDeque<>();
+        int choice = 0;
+ 
+        do {
+            System.out.println("\n=== LIBRARY BOOK LOOKUP & BORROWING SYSTEM ===");
+            System.out.println("1. Add book (code and title)");
+            System.out.println("2. Find book by code");
+            System.out.println("3. List books");
+            System.out.println("4. Add borrowing request (student name and book code)");
+            System.out.println("5. View next request");
+            System.out.println("6. Process next request");
+            System.out.println("7. Exit");
+            System.out.print("Enter your choice (1-7): ");
+ 
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                scanner.nextLine(); 
+            } else {
+                System.out.println("Invalid input! Please enter a number between 1 and 7.");
+                scanner.nextLine();
+                continue;
+            }
+ 
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter book accession code: ");
+                    String code = scanner.nextLine().trim().toUpperCase();
+                    if (code.isEmpty()) {
+                        System.out.println("Error: Book code cannot be blank.");
+                        break;
+                    }
+                    if (bookCatalog.containsKey(code)) {
+                        System.out.println("Error: A book with code \"" + code + "\" already exists.");
+                        break;
+                    }
+                    System.out.print("Enter book title: ");
+                    String title = scanner.nextLine().trim();
+                    if (title.isEmpty()) {
+                        System.out.println("Error: Book title cannot be blank.");
+                        break;
+                    }
+                    bookCatalog.put(code, title);
+                    System.out.println("Book successfully added to catalog.");
+                    break;
+ 
+                case 2:
+                    if (bookCatalog.isEmpty()) {
+                        System.out.println("The catalog is empty.");
+                        break;
+                    }
+                    System.out.print("Enter book code to find: ");
+                    String searchCode = scanner.nextLine().trim().toUpperCase();
+                    if (bookCatalog.containsKey(searchCode)) {
+                        System.out.println("Found Book -> Code: " + searchCode + ", Title: " + bookCatalog.get(searchCode));
+                    } else {
+                        System.out.println("Error: No book found with code \"" + searchCode + "\".");
+                    }
+                    break;
+ 
+                case 3:
+                    if (bookCatalog.isEmpty()) {
+                        System.out.println("The library catalog is currently empty.");
+                    } else {
+                        System.out.println("\n--- Library Book Catalog ---");
+                        for (Map.Entry<String, String> entry : bookCatalog.entrySet()) {
+                            System.out.println("Code: " + entry.getKey() + " | Title: " + entry.getValue());
+                        }
+                    }
+                    break;
+ 
+                case 4:
+                    System.out.print("Enter student name: ");
+                    String student = scanner.nextLine().trim();
+                    if (student.isEmpty()) {
+                        System.out.println("Error: Student name cannot be blank.");
+                        break;
+                    }
+                    System.out.print("Enter requested book code: ");
+                    String reqCode = scanner.nextLine().trim().toUpperCase();
+                    if (!bookCatalog.containsKey(reqCode)) {
+                        System.out.println("Error: Cannot queue request. Book code \"" + reqCode + "\" does not exist in the catalog.");
+                        break;
+                    }
+                    String requestDetails = "Student: " + student + " | Book Code: " + reqCode + " (" + bookCatalog.get(reqCode) + ")";
+                    requestQueue.offer(requestDetails);
+                    System.out.println("Borrowing request successfully queued.");
+                    break;
+ 
+                case 5:
+                    if (requestQueue.isEmpty()) {
+                        System.out.println("The borrowing request queue is currently empty.");
+                    } else {
+                        System.out.println("Next Request in Line -> " + requestQueue.peek());
+                    }
+                    break;
+ 
+                case 6:
+                    if (requestQueue.isEmpty()) {
+                        System.out.println("No pending requests to process. The queue is empty.");
+                    } else {
+                        String processedRequest = requestQueue.poll();
+                        System.out.println("Successfully processed request: " + processedRequest);
+                    }
+                    break;
+ 
+                case 7:
+                    System.out.println("Exiting Library System. Goodbye!");
+                    break;
+ 
+                default:
+                    System.out.println("Invalid choice! Please select an option between 1 and 7.");
+            }
+        } while (choice != 7);
+ 
+        scanner.close();
+    }
+}
